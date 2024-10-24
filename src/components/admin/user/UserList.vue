@@ -1,47 +1,32 @@
 <template>
     <div class="user-list">
         <div class="header">
-            <h2>Daftar Pengguna</h2>
-            <button class="add-btn" @click="$emit('add-user')">
-                Tambah Pengguna
-            </button>
+            <h2>Daftar User</h2>
+            <button class="add-btn" @click="showAddForm">Tambah User</button>
+        </div> 
+
+        <div class="user-card">
+            <UserCard v-for="user in users" :key="user.kode" :user="user" @edit-user="editUser" @delete-user="deleteUser" />
         </div>
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th class="action-column">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="user in users" :key="user.id">
-                        <td>{{ user.id }}</td>
-                        <td>{{ user.username }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>{{ user.role }}</td>
-                        <td class="action-column">
-                            <button @click="$emit('edit-user', user)" class="edit-btn">
-                                Edit
-                            </button>
-                            <button @click="deleteUser(user.id)" class="delete-btn">
-                                Hapus
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+
+        <Modal :visible="showForm" @close="cancelEditForm">
+            <UserForm :user="selectedUser" :isEdit="isEdit" @submit="handleSubmit" @cancel="cancelEditForm" />
+        </Modal> 
     </div>
-</template>
+</template> 
 
 
 <script>
+import UserCard from './UserCard.vue'
+import Modal from '../Modal.vue'
+import UserForm from './UserForm.vue'
 
 export default {
+    components: {
+        UserCard,
+        Modal,
+        UserForm
+    },
     data() {
         return {
             users: [
@@ -58,19 +43,46 @@ export default {
                     role: 'User',
                 },
             ],
+            showForm: false,
+            selectedUser: null,
+            isEdit: false
         }
     },
     methods: {
+        showAddForm(){
+            this.selectedUser = {id: 0, username: '', email: '', role: ''},
+            this.isEdit = false
+            this.showForm = true
+        },
+        editUser(user){
+            this.selectedUser = {...user},
+            this.isEdit = true
+            this.showForm = true  
+        },
+        handleSubmit(user){
+            if(this.isEdit){
+                let index = this.users.findIndex((i) => i.id === user.id)
+                this.users[index] = user
+            }else {
+                this.users.push(user)
+            }
+            this.showForm = false
+        },
+        cancelEditForm(){
+            this.showForm = false
+            this.selectedUser = null
+            this.isEdit = false
+        },
         deleteUser(id) {
             this.users = this.users.filter((user) => user.id !== id)
-            this.$emit('delete-user', id)
-        },
-    },
+            this.$emit("delete-user", id)
+        }
+    }
 }
 </script>
 
-<style scoped>
 
+<style scoped>
 .user-list {
     padding: 24px;
     background-color: #fff;
@@ -165,6 +177,7 @@ button {
 }
 
 @media (max-width: 600px) {
+    
     th, td {
         padding: 8px 10px;
     }
