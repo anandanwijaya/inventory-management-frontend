@@ -10,10 +10,10 @@
       <div v-if="showForm" class="form-content">
         <ItemForm :item="selectedItem" :isEdit="isEdit" @submit="handleSubmit" @cancel="cancelEditForm" />
       </div>
-      
     </div>
   </div>
 </template>
+
 
 <script>
 import ItemList from '@/components/user/item/ItemList.vue';
@@ -59,7 +59,6 @@ export default {
     },
   }
 }
-
 </script>
 
 <style scoped>

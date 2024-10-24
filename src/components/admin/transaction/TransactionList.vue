@@ -1,7 +1,6 @@
 <template>
     <div class="transaction-list">
         <h2>Daftar Transaksi</h2>
-
         <div class="table-responsive">
             <table>
                 <thead>
@@ -18,10 +17,7 @@
                 </thead>
 
                 <tbody>
-                    <tr
-                        v-for="transaction in transactions"
-                        :key="transaction.id"
-                    >
+                    <tr v-for="transaction in transactions" :key="transaction.id" >
                         <td>{{ transaction.id }}</td>
                         <td>{{ transaction.namaUser }}</td>
                         <td>{{ transaction.namaBarang }}</td>
@@ -31,16 +27,8 @@
                         <td>{{ transaction.status }}</td>
 
                         <td class="action-buttons">
-                            <button
-                                class="return-btn"
-                                @click="openReturnForm(transaction)"
-                                :disabled="transaction.status === 'Returned'"
-                            >
-                                {{
-                                    transaction.status === 'Returned'
-                                        ? 'Dikembalikan'
-                                        : 'Kembalikan'
-                                }}
+                            <button class="return-btn" @click="openReturnForm(transaction)" :disabled="transaction.status === 'Returned'" >
+                                {{ transaction.status === 'Returned' ? 'Dikembalikan' : 'Kembalikan' }}
                             </button>
                         </td>
                     </tr>
@@ -49,11 +37,7 @@
         </div>
 
         <Modal :visible="showForm" @close="cancelReturnForm">
-            <TransactionForm
-                :transaction="selectedTransaction"
-                @submit="handleReturn"
-                @cancel="cancelReturnForm"
-            />
+            <TransactionForm :transaction="selectedTransaction" @submit="handleReturn" @cancel="cancelReturnForm" />
         </Modal>
     </div>
 </template>
@@ -67,7 +51,6 @@ export default {
         Modal,
         TransactionForm,
     },
-
     data() {
         return {
             transactions: [
@@ -94,13 +77,11 @@ export default {
             selectedTransaction: null,
         }
     },
-
     methods: {
         openReturnForm(transaction) {
             this.selectedTransaction = { ...transaction }
             this.showForm = true
         },
-
         handleReturn(updatedTransaction) {
             const index = this.transactions.findIndex(
                 (t) => t.id === updatedTransaction.id
@@ -114,7 +95,6 @@ export default {
             }
             this.cancelReturnForm()
         },
-
         cancelReturnForm() {
             this.showForm = false
             this.selectedTransaction = null

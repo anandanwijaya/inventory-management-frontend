@@ -14,7 +14,7 @@
     </nav>
 </template>
 
- 
+
 <script>
     export default {
         methods: {
@@ -25,9 +25,7 @@
     }
 </script>
 
-
 <style scoped>
-
 .navbar {
     background-color: #4b3f6b;
     color: white;
@@ -63,7 +61,6 @@
 }
 
 @media (max-width: 768px) {
-    
     .navbar-menu {
         width: 100%;
         justify-content: center;

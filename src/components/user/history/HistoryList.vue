@@ -1,7 +1,6 @@
 <template>
     <div class="history-list">
         <h2>Riwayat Peminjaman</h2>
-
         <div class="table-responsive">
             <table>
                 <thead>

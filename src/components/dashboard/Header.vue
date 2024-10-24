@@ -1,7 +1,6 @@
 <template>
     <header :class="{ expanded: !isSidebarVisible }">
         <button class="toggle-btn" @click="toggleSidebar">☰</button>
-
         <div class="header-content">
             <div class="search-bar-container">
                 <input type="text" v-model="search" placeholder="Search" class="search-bar" />

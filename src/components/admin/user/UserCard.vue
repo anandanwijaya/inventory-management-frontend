@@ -24,7 +24,6 @@ export default {
 }
 </script>
 
-
 <style scoped>
 .user-card {
     display: flex;

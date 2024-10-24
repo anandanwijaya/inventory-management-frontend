@@ -1,7 +1,6 @@
 <template>
     <div class="item-list">
         <h2>Daftar Barang</h2>
-
         <div class="table-responsive">
             <table>
                 <thead>
@@ -61,15 +60,13 @@ export default {
                 {
                     kode: '2024001',
                     nama: 'Acer Nitro 15 AN515-58',
-                    deskripsi:
-                        'Intel Core i5 12500H, RTX 3050, RAM 8GB DDR4, LAYAR 15.6',
+                    deskripsi: 'Intel Core i5 12500H, RTX 3050, RAM 8GB DDR4, LAYAR 15.6',
                     stok: 80,
                 },
                 {
                     kode: '2024002',
                     nama: 'Lenovo LOQ 15 15IRH8',
-                    deskripsi:
-                        'Intel Core i5 13450H, RTX 3050, RAM 8GB DDR4, LAYAR 15.6',
+                    deskripsi: 'Intel Core i5 13450H, RTX 3050, RAM 8GB DDR4, LAYAR 15.6',
                     stok: 80,
                 },
             ],
@@ -103,7 +100,6 @@ export default {
             this.showForm = false
             this.selectedItem = null
         },
-
         handleSearch(query) {
             this.searchQuery = query
         },

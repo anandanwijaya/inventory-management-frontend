@@ -3,8 +3,7 @@
         <div class="modal-content">
             <button class="close-button" @click="$emit('close')">&times;</button>
             <slot></slot>
-        </div>
-        
+        </div>  
     </div>
 </template>
 
@@ -72,5 +71,4 @@ export default {
 .close-button:hover {
     color: #000;
 }
-
 </style>
