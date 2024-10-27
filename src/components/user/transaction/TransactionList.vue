@@ -33,7 +33,7 @@
                         <td class="action-buttons">
                             <button
                                 class="return-btn"
-                                @click="openReturnForm(transaction)"
+                                @click="handleReturn(transaction)"
                                 :disabled="transaction.status === 'Returned'"
                             >
                                 {{
@@ -47,14 +47,6 @@
                 </tbody>
             </table>
         </div>
-
-        <Modal :visible="showForm" @close="cancelReturnForm">
-            <TransactionForm
-                :transaction="selectedTransaction"
-                @submit="handleReturn"
-                @cancel="cancelReturnForm"
-            />
-        </Modal>
     </div>
 </template>
 
@@ -96,11 +88,6 @@ export default {
     },
 
     methods: {
-        openReturnForm(transaction) {
-            this.selectedTransaction = { ...transaction }
-            this.showForm = true
-        },
-
         handleReturn(updatedTransaction) {
             const index = this.transactions.findIndex(
                 (t) => t.id === updatedTransaction.id

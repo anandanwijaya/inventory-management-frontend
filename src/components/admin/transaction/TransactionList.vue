@@ -27,7 +27,7 @@
                         <td>{{ transaction.status }}</td>
 
                         <td class="action-buttons">
-                            <button class="return-btn" @click="openReturnForm(transaction)" :disabled="transaction.status === 'Returned'" >
+                            <button class="return-btn" @click="handleReturn(transaction)" :disabled="transaction.status === 'Returned'" >
                                 {{ transaction.status === 'Returned' ? 'Dikembalikan' : 'Kembalikan' }}
                             </button>
                         </td>
@@ -35,12 +35,9 @@
                 </tbody>
             </table>
         </div>
-
-        <Modal :visible="showForm" @close="cancelReturnForm">
-            <TransactionForm :transaction="selectedTransaction" @submit="handleReturn" @cancel="cancelReturnForm" />
-        </Modal>
     </div>
 </template>
+
 
 <script>
 import Modal from '@/components/admin/Modal.vue'
@@ -78,10 +75,6 @@ export default {
         }
     },
     methods: {
-        openReturnForm(transaction) {
-            this.selectedTransaction = { ...transaction }
-            this.showForm = true
-        },
         handleReturn(updatedTransaction) {
             const index = this.transactions.findIndex(
                 (t) => t.id === updatedTransaction.id
@@ -132,8 +125,7 @@ table {
     margin-top: 20px;
 }
 
-th,
-td {
+th, td {
     border: 1px solid #ddd;
     padding: 12px;
     text-align: left;
@@ -177,8 +169,7 @@ button {
 }
 
 @media (max-width: 600px) {
-    th,
-    td {
+    th, td {
         padding: 8px 10px;
     }
 
