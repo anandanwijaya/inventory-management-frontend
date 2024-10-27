@@ -51,15 +51,7 @@
 </template>
 
 <script>
-import Modal from '@/components/admin/Modal.vue'
-import TransactionForm from '@/components/user/transaction/TransactionForm.vue'
-
 export default {
-    components: {
-        Modal,
-        TransactionForm,
-    },
-
     data() {
         return {
             transactions: [
@@ -99,13 +91,7 @@ export default {
                     status: 'Returned',
                 }
             }
-            this.cancelReturnForm()
-        },
-
-        cancelReturnForm() {
-            this.showForm = false
-            this.selectedTransaction = null
-        },
+        }
     },
 }
 </script>
