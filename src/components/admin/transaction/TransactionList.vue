@@ -44,7 +44,7 @@ export default {
             transactions: [
                 {
                     kode: '2024001',
-                    namaKaryawan: 'Budiono',
+                    namaKaryawan: 'Nanda',
                     namaBarang: 'Acer Nitro 15 AN515-58',
                     jumlahPinjam: 1,
                     tanggalPinjam: '2024-8-10',
@@ -53,7 +53,7 @@ export default {
                 },
                 {
                     kode: '2024002',
-                    namaKaryawan: 'Sisil',
+                    namaKaryawan: 'Wendy',
                     namaBarang: 'Lenovo LOQ 15 15IRH8',
                     jumlahPinjam: 1,
                     tanggalPinjam: '2024-8-10',
