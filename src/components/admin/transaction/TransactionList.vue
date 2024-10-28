@@ -1,34 +1,34 @@
 <template>
     <div class="transaction-list">
-        <h2>Daftar Transaksi</h2>
+        <div class="header">
+            <h2>Daftar Transaksi</h2>
+        </div>
         <div class="table-responsive">
             <table>
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Nama User</th>
+                        <th>Nama Karyawan</th>
                         <th>Nama Barang</th>
                         <th>Jumlah Pinjam</th>
                         <th>Tanggal Pinjam</th>
-                        <th>Tanggal Pengembalian</th>
+                        <th>Tanggal Kembali</th>
                         <th>Status</th>
-                        <th>Aksi</th>
+                        <th class="action-column">Aksi</th>
                     </tr>
                 </thead>
-
                 <tbody>
-                    <tr v-for="transaction in transactions" :key="transaction.id" >
-                        <td>{{ transaction.id }}</td>
-                        <td>{{ transaction.namaUser }}</td>
+                    <tr v-for="transaction in transactions" :key="transaction.kode">
+                        <td>{{ transaction.kode }}</td>
+                        <td>{{ transaction.namaKaryawan }}</td>
                         <td>{{ transaction.namaBarang }}</td>
                         <td>{{ transaction.jumlahPinjam }}</td>
                         <td>{{ transaction.tanggalPinjam }}</td>
-                        <td>{{ transaction.tanggalPengembalian }}</td>
+                        <td>{{ transaction.tanggalKembali }}</td>
                         <td>{{ transaction.status }}</td>
-
                         <td class="action-buttons">
-                            <button class="return-btn" @click="handleReturn(transaction)" :disabled="transaction.status === 'Returned'" >
-                                {{ transaction.status === 'Returned' ? 'Dikembalikan' : 'Kembalikan' }}
+                            <button class="verif-btn" @click="verifikasi(transaction)" :disabled="transaction.status === 'Returned'">
+                                {{ transaction.status === 'Returned' ? 'Returned' : 'Verifikasi' }}
                             </button>
                         </td>
                     </tr>
@@ -37,50 +37,39 @@
         </div>
     </div>
 </template>
-
-
 <script>
 export default {
     data() {
         return {
             transactions: [
                 {
-                    id: '2024001',
-                    namaUser: 'John Doe',
+                    kode: '2024001',
+                    namaKaryawan: 'Budiono',
                     namaBarang: 'Acer Nitro 15 AN515-58',
                     jumlahPinjam: 1,
-                    tanggalPinjam: '2022-10-10',
-                    tanggalPengembalian: '2022-10-17',
-                    status: 'Borrowed',
+                    tanggalPinjam: '2024-8-10',
+                    tanggalKembali: '2024-8-17',
+                    status: 'Borrowed'
                 },
                 {
-                    id: '2024002',
-                    namaUser: 'Jane Smith',
+                    kode: '2024002',
+                    namaKaryawan: 'Sisil',
                     namaBarang: 'Lenovo LOQ 15 15IRH8',
                     jumlahPinjam: 1,
-                    tanggalPinjam: '2022-10-10',
-                    tanggalPengembalian: '2022-10-17',
-                    status: 'Borrowed',
-                },
-            ],
-            showForm: false,
-            selectedTransaction: null,
+                    tanggalPinjam: '2024-8-10',
+                    tanggalKembali: '2024-8-17',
+                    status: 'Borrowed'
+                }
+            ]
         }
     },
     methods: {
-        handleReturn(updatedTransaction) {
-            const index = this.transactions.findIndex(
-                (t) => t.id === updatedTransaction.id
-            )
-
-            if (index !== -1) {
-                this.transactions[index] = {
-                    ...updatedTransaction,
-                    status: 'Returned',
-                }
+        verifikasi(transaction) {
+            if (transaction.status === 'Borrowed') {
+                transaction.status = 'Returned'
             }
         }
-    },
+    }
 }
 </script>
 
@@ -142,16 +131,16 @@ button {
     font-size: 14px;
 }
 
-.return-btn {
+.verif-btn {
     background-color: #754bc5;
     color: white;
 }
 
-.return-btn:hover {
+.verif-btn:hover {
     background-color: #5a37a0;
 }
 
-.return-btn[disabled] {
+.verif-btn[disabled] {
     background-color: #ccc;
     cursor: not-allowed;
 }
