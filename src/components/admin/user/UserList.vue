@@ -60,13 +60,15 @@ export default {
             this.showForm = true  
         },
         handleSubmit(user){
-            if(this.isEdit){
-                let index = this.users.findIndex((i) => i.id === user.id)
-                this.users[index] = user
-            }else {
-                this.users.push(user)
+            if (user.id && user.username && user.email && user.role !== null && !isNaN(user.id)) {
+                if(this.isEdit){
+                    let index = this.users.findIndex((i) => i.id === user.id)
+                    this.users[index] = user
+                }else {
+                    this.users.push(user)
+                }
+                this.showForm = false
             }
-            this.showForm = false
         },
         cancelEditForm(){
             this.showForm = false
