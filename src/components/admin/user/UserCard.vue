@@ -1,16 +1,18 @@
 <template>
-    <div class="user-card">
-        <div class="user-container">
-            <h3>{{ user.username }}</h3>
-            <p>{{ user.email }}</p>
-            <p class="role">Stok: <span class="role-span"> {{ user.role }} </span></p>
-        </div>
-        <div class="buttons">
-            <button @click="$emit('edit-user', user)" class="edit">Edit</button>
-            <button @click="$emit('delete-user', user.id)" class="delete">Delete</button>
+    <div class="user-card card mb-3 shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title">{{ user.username }}</h3>
+            <p class="card-text">{{ user.email }}</p>
+            <p class="card-text role">{{ user.role }}</p>
+        
+            <div class="buttons d-flex gap-2 mt-3">
+                <button @click="$emit('edit-user', user)" class="btn btn-success edit">Edit</button>
+                <button @click="$emit('delete-user', user.id)" class="btn btn-danger delete">Delete</button>
+            </div>
         </div>
     </div>
 </template>
+
 
 <script> 
 export default {
@@ -26,15 +28,6 @@ export default {
 
 <style scoped>
 .user-card {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    border: 1px solid #ddd;
-    padding: 16px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
@@ -43,67 +36,28 @@ export default {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.user-card .user-container{
-    display: flex;
-    flex-direction: column;
-}
-
-.user-card h3 {
+.user-card .card-title {
     margin: 0 0 10px;
-    font-size: 1.2em;
-    font-weight: 700;
+    font-size: 1.5rem;
     color: #333;
 }
 
-.user-card p {
+.user-card .card-text {
     margin: 5px 0;
     color: #555;
 }
 
-.user-card .role {
-    font-weight: bold;
-    color: #2c3e50;
+.user-card .buttons .btn {
+    transition: background-color 0.2s, border-color 0.2s;
 }
 
-.user-card .role-span {
-    font-weight: 500;
-    color: #2c3e50;
+.user-card .buttons .btn:hover {
+    background-color: darken(#28a745, 10%);
+    border-color: darken(#28a745, 10%);
 }
 
-.user-card .buttons {
-    display: flex;
-    align-self: flex-end;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.user-card button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.user-card button:hover {
-    background-color: #ddd;
-}
-
-.user-card button.edit {
-    background-color: #4caf50;
-    color: white;
-}
-
-.user-card button.edit:hover {
-    background-color: #45a049;
-}
-
-.user-card button.delete {
-    background-color: #e74c3c;
-    color: white;
-}
-
-.user-card button.delete:hover {
-    background-color: #c0392b;
+.user-card .buttons .btn.delete:hover {
+    background-color: darken(#dc3545, 10%);
+    border-color: darken(#dc3545, 10%);
 }
 </style>

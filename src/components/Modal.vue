@@ -1,9 +1,8 @@
 <template>
     <div
         class="modal fade"
-        :class="{ show: visible }"
+        :class="{ show: visible, 'd-block': visible }"
         tabindex="-1"
-        style="display: block"
         aria-modal="true"
         role="dialog"
         v-if="visible"
@@ -11,6 +10,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
+                    <h5 class="modal-title">Modal Title</h5>
                     <button
                         type="button"
                         class="btn-close"
@@ -56,6 +56,10 @@ export default {
 }
 
 .modal.show {
+    display: block;
+}
+
+.modal.d-block {
     display: block;
 }
 </style>

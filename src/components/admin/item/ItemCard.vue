@@ -1,5 +1,5 @@
 <template>
-    <div class="item-card card mb-3">
+    <div class="item-card card mb-3 shadow-sm">
         <div class="card-body">
             <h3 class="card-title">{{ item.nama }}</h3>
             <p class="card-text">{{ item.deskripsi }}</p>
@@ -9,7 +9,6 @@
                 <button @click="$emit('edit-item', item)" class="btn btn-success edit">
                     Edit
                 </button>
-
                 <button @click="$emit('delete-item', item.kode)" class="btn btn-danger delete">
                     Delete
                 </button>
@@ -43,7 +42,7 @@ export default {
 
 .item-card .card-title {
     margin: 0 0 10px;
-    font-size: 1.5em;
+    font-size: 1.5rem;
     color: #333;
 }
 
@@ -52,40 +51,17 @@ export default {
     color: #555;
 }
 
-.item-card .stock {
-    font-weight: bold;
-    color: #2c3e50;
+.item-card .buttons .btn {
+    transition: background-color 0.2s, border-color 0.2s;
 }
 
-.item-card .buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
+.item-card .buttons .btn:hover {
+    background-color: darken(#28a745, 10%);
+    border-color: darken(#28a745, 10%);
 }
 
-.item-card button {
-    transition: background-color 0.2s;
-}
-
-.item-card button:hover {
-    background-color: #ddd;
-}
-
-.item-card button.edit {
-    background-color: #4caf50;
-    color: white;
-}
-
-.item-card button.edit:hover {
-    background-color: #45a049;
-}
-
-.item-card button.delete {
-    background-color: #e74c3c;
-    color: white;
-}
-
-.item-card button.delete:hover {
-    background-color: #c0392b;
+.item-card .buttons .btn.delete:hover {
+    background-color: darken(#dc3545, 10%);
+    border-color: darken(#dc3545, 10%);
 }
 </style>

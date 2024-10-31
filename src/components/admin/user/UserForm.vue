@@ -1,42 +1,54 @@
-<template>
+<template> 
     <div>
-        <form @submit.prevent="submitForm">Submit Form
-            <table>
-                <tbody>
-                    <tr>
-                        <td>ID</td>
-                        <td>
-                            <input type="text" v-model="form.id" id="id" :disabled="isEdit" required />
-                        </td>
-                    </tr> 
-                    <tr>
-                        <td>Username</td>
-                        <td>
-                            <input type="text" v-model="form.username" id="username" required />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Email</td>
-                        <td>
-                            <input type="text" v-model="form.email" id="email" required />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Role</td>
-                        <td>
-                            <input type="text" v-model="form.role" id="role" required />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <button type="submit">
-                                {{ isEdit ? 'Simpan Perubahan' : 'Tambah User' }}
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <form @submit.prevent="submitForm" class="mb-3 p-3 shadow-sm bg-white rounded">
+            <div class="mb-3">
+                <label for="id" class="form-label">ID</label>
+                <input
+                    type="number"
+                    v-model="form.id"
+                    id="id"
+                    class="form-control"
+                    :disabled="isEdit"
+                    required
+                />
+            </div>
+
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input
+                    type="text"
+                    v-model="form.username"
+                    id="username"
+                    class="form-control"
+                    required
+                />
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input
+                    type="text"
+                    v-model="form.email"
+                    id="email"
+                    class="form-control"
+                    required
+                />
+            </div>
+
+            <div class="mb-3">
+                <label for="role" class="form-label">Role</label>
+                <input
+                    type="text"
+                    v-model="form.role"
+                    id="role"
+                    class="form-control"
+                    required
+                />
+            </div>
+
+            <button type="submit" class="btn btn-success">
+                {{ isEdit ? 'Simpan Perubahan' : 'Tambah User' }}
+            </button>
         </form>
     </div>
 </template>
@@ -68,7 +80,6 @@ export default {
         user: {
             immediate: true,
             handler(newUser) {
-                // Copy user to form when editing, reset form when adding new user
                 if (this.isEdit) {
                     this.form = { ...newUser };
                 } else {
@@ -90,35 +101,40 @@ export default {
 };
 </script>
 
-
 <style scoped>
+form {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+} 
 
-table {
-    width: 100%;
-    border-collapse: collapse;
+.mb-3 {
+    margin-bottom: 1rem;
 }
 
-td {
-    padding: 10px;
-    border: 1px solid #ddd;
+.form-label {
+    font-weight: bold;
+    color: #4b3f6b;
 }
 
-input[type="text"], input[type="number"] {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
+.form-control {
+    border-radius: 4px;
+    border: 1px solid #ccc;
 }
 
-button[type="submit"] {
+.form-control:focus {
+    border-color: #4b3f6b;
+    box-shadow: 0 0 0 0.2rem rgba(75, 63, 107, 0.25);
+}
+
+.btn-success {
     background-color: #4caf50;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    border-color: #4caf50;
 }
 
-button[type="submit"]:hover {
+.btn-success:hover {
     background-color: #45a049;
+    border-color: #45a049;
 }
 </style>

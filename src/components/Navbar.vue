@@ -26,62 +26,12 @@
 </script>
 
 <style scoped>
-.navbar {
-    background-color: #4b3f6b;
-    color: white;
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    flex-wrap: wrap;
+.modal {
+    display: none;
+    background: rgba(0, 0, 0, 0.5);
 }
 
-.navbar-brand {
-    display: flex;
-    align-items: center;
-}
-
-.navbar-item {
-    color: white;
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.navbar-item:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-}
-
-.navbar-menu {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-@media (max-width: 768px) {
-    .navbar-menu {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .navbar-start {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        align-items: center;
-    }
-
-    .navbar-item {
-        width: 100%;
-        text-align: center;
-        padding: 15px 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .navbar-item:last-child {
-        border-bottom: none;
-    }
+.modal.show {
+    display: block;
 }
 </style>

@@ -19,7 +19,9 @@
 
                 <tbody>
                     <tr
-                        v-for="transaction in transactions" :key="transaction.id">
+                        v-for="transaction in transactions"
+                        :key="transaction.id"
+                    >
                         <td>{{ transaction.id }}</td>
                         <td>{{ transaction.namaUser }}</td>
                         <td>{{ transaction.namaBarang }}</td>
@@ -56,7 +58,7 @@
 </template>
 
 <script>
-import Modal from '@/components/admin/Modal.vue'
+import Modal from '@/components/Modal.vue'
 import TransactionForm from '@/components/user/transaction/TransactionForm.vue'
 
 export default {
@@ -114,8 +116,8 @@ export default {
         cancelReturnForm() {
             this.showForm = false
             this.selectedTransaction = null
-        }
-    }
+        },
+    },
 }
 </script>
 
@@ -148,7 +150,8 @@ table {
     margin-top: 20px;
 }
 
-th, td {
+th,
+td {
     border: 1px solid #ddd;
     padding: 12px;
     text-align: left;
@@ -192,7 +195,8 @@ button {
 }
 
 @media (max-width: 600px) {
-    th, td {
+    th,
+    td {
         padding: 8px 10px;
     }
 
