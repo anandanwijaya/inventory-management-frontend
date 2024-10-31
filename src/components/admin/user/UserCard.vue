@@ -27,6 +27,7 @@ export default {
 </script>
 
 <style scoped>
+
 .user-card {
     transition: transform 0.2s, box-shadow 0.2s;
 }

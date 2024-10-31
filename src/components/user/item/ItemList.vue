@@ -116,6 +116,7 @@ export default {
 </script>
 
 <style scoped>
+
 .item-list {
     padding: 16px;
     background-color: #fff;

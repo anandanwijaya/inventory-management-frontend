@@ -58,6 +58,7 @@ export default {
 </script>
 
 <style scoped>
+
 .history-list {
     padding: 16px;
     background-color: #fff;

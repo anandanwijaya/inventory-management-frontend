@@ -111,6 +111,7 @@ export default {
 </script>
 
 <style scoped>
+
 .item-list {
     background-color: #fff;
     border-radius: 8px;

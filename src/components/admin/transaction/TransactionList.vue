@@ -74,6 +74,7 @@ export default {
 </script>
 
 <style scoped>
+
 .transaction-list {
     padding: 20px;
     background-color: #fff;

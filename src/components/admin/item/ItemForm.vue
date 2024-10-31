@@ -104,6 +104,7 @@ export default {
 
 
 <style scoped>
+
 form {
     background-color: #fff;
     border-radius: 8px;
