@@ -116,7 +116,6 @@ export default {
 </script>
 
 <style scoped>
-
 .item-list {
     padding: 16px;
     background-color: #fff;
@@ -138,8 +137,7 @@ table {
     margin-top: 20px;
 }
 
-th,
-td {
+th, td {
     border: 1px solid #ddd;
     padding: 12px 15px;
     text-align: center;

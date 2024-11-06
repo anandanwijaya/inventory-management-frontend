@@ -124,11 +124,11 @@ export default {
 <style scoped>
 
 .transaction-list {
-    padding: 20px;
+    padding: 16px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin: 20px 0;
+    margin: 8px 0;
     width: 100%;
     box-sizing: border-box;
 }
