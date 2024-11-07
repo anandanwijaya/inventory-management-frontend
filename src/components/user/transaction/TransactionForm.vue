@@ -1,6 +1,6 @@
 <template>
     <div class="transaction-form">
-        <form @submit.prevent="submitForm">
+        <form @submit.prevent="submitForm"> 
             <h2>Pengembalian Barang</h2>
 
             <div>

@@ -30,7 +30,7 @@ import { EventBus } from './utils/EventBus'
 export default {
     components: {
         Header,
-        Sidebar,
+        Sidebar
     },
     data() {
         return {

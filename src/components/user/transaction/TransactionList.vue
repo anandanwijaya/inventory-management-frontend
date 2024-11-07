@@ -97,7 +97,6 @@ export default {
     methods: {
         openReturnForm(transaction) {
             this.selectedTransaction = { ...transaction }
-
             this.showForm = true
         },
         handleReturn(updatedTransaction) {
