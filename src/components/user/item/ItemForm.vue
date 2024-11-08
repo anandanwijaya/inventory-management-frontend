@@ -42,7 +42,7 @@
 </template>
 
 <script>
-export default {
+export default { 
     props: {
         item: Object,
         isEdit: Boolean,
@@ -63,11 +63,12 @@ export default {
 
     methods: {
         submitForm() {
-            // Emit custom event 'submit' dengan payload data form
+            if(this.item.stok < this.form.jumlah_pinjam){
+                return alert('Jumlah melebihi stok!')
+            }
             this.$emit('submit', { ...this.form })
         },
         cancelForm() {
-            // Emit custom event 'cancel' tanpa payload
             this.$emit('cancel')
         }
     },

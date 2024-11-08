@@ -4,13 +4,13 @@
             <h2>Pengembalian Barang</h2>
 
             <div>
-                <label for="id">ID Barang:</label>
-                <input type="text" v-model="form.id" id="id" :disabled="true" />
+                <label for="kode">Kode Barang:</label>
+                <input type="text" v-model="form.kode" id="kode" :disabled="true" />
             </div>
 
             <div>
-                <label for="namaUser">Nama User:</label>
-                <input type="text" v-model="form.namaUser" id="namaUser" :disabled="true" />
+                <label for="namaKaryawan">Nama Karyawan:</label>
+                <input type="text" v-model="form.namaKaryawan" id="namaKaryawan" :disabled="true" />
             </div>
 
             <div>
@@ -19,18 +19,18 @@
             </div>
 
             <div>
+                <label for="jumlahPinjam">Jumlah Pinjam:</label>
+                <input type="number" v-model="form.jumlahPinjam" id="jumlahPinjam" :disabled="true" />
+            </div>
+
+            <div>
                 <label for="tanggalPinjam">Tanggal Pinjam:</label>
                 <input type="date" v-model="form.tanggalPinjam" id="tanggalPinjam" :disabled="true" />
             </div>
 
             <div>
-                <label for="tanggalKembali">Tanggal Kembali:</label>
-                <input type="date" v-model="form.tanggalKembali" id="tanggalKembali" />
-            </div>
-
-            <div>
-                <label for="jumlahPinjam">Jumlah Pinjam:</label>
-                <input type="number" v-model="form.jumlahPinjam" id="jumlahPinjam" :disabled="true" />
+                <label for="tanggalPengembalian">Tanggal Pengembalian:</label>
+                <input type="date" v-model="form.tanggalPengembalian" id="tanggalPengembalian" />
             </div>
 
             <div class="button-container">
@@ -49,12 +49,12 @@ export default {
     data() {
         return {
             form: {
-                id: this.transaction ? this.transaction.id : '',
-                namaUser: this.transaction ? this.transaction.namaUser : '',
+                kode: this.transaction ? this.transaction.kode : '',
+                namaKaryawan: this.transaction ? this.transaction.namaKaryawan : '',
                 namaBarang: this.transaction ? this.transaction.namaBarang : '',
-                tanggalPinjam: this.transaction ? this.transaction.tanggalPinjam : '',
-                tanggalKembali: this.transaction ? new Date : '',
                 jumlahPinjam: this.transaction ? this.transaction.jumlahPinjam : 1,
+                tanggalPinjam: this.transaction ? this.transaction.tanggalPinjam : '',
+                tanggalPengembalian: this.transaction ? this.transaction.tanggalPengembalian : '',
             }
         }
     },
@@ -70,10 +70,11 @@ export default {
         transaction(newTransaction) {
             if (newTransaction) {
                 this.form.id = newTransaction.id
-                this.form.namaUser = newTransaction.namaUser
+                this.form.namaKaryawan = newTransaction.namaKaryawan
                 this.form.namaBarang = newTransaction.namaBarang
-                this.form.tanggalPinjam = newTransaction.tanggalPinjam
                 this.form.jumlahPinjam = newTransaction.jumlahPinjam
+                this.form.tanggalPinjam = newTransaction.tanggalPinjam
+                this.form.tanggalPengembalian = newTransaction.tanggalPengembalian
             }
         }
     }

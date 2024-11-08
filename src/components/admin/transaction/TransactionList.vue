@@ -12,33 +12,61 @@
                         <th>Nama Barang</th>
                         <th>Jumlah Pinjam</th>
                         <th>Tanggal Pinjam</th>
-                        <th>Tanggal Kembali</th>
+                        <th>Tanggal Pengembalian</th>
                         <th>Status</th>
                         <th class="action-column">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="transaction in transactions" :key="transaction.kode">
+                    <tr
+                        v-for="transaction in transactions"
+                        :key="transaction.kode"
+                    >
                         <td>{{ transaction.kode }}</td>
                         <td>{{ transaction.namaKaryawan }}</td>
                         <td>{{ transaction.namaBarang }}</td>
                         <td>{{ transaction.jumlahPinjam }}</td>
                         <td>{{ transaction.tanggalPinjam }}</td>
-                        <td>{{ transaction.tanggalKembali }}</td>
+                        <td>{{ transaction.tanggalPengembalian }}</td>
                         <td>{{ transaction.status }}</td>
                         <td class="action-buttons">
-                            <button class="verif-btn" @click="verifikasi(transaction)" :disabled="transaction.status === 'Returned'">
-                                {{ transaction.status === 'Returned' ? 'Returned' : 'Verifikasi' }}
+                            <button
+                                class="verif-btn"
+                                @click="openReturnForm(transaction)"
+                                :disabled="transaction.status === 'Returned'"
+                            >
+                                {{
+                                    transaction.status === 'Returned'
+                                        ? 'Returned'
+                                        : 'Verifikasi'
+                                }}
                             </button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
+
+        <Modal :visible="showForm" @close="cancelReturnForm">
+            <TransactionForm
+                :transaction="selectedTransaction"
+                @submit="handleReturn"
+                @cancel="cancelReturnForm"
+            />
+        </Modal>
     </div>
 </template>
+
+
 <script>
+import Modal from '@/components/Modal.vue'
+import TransactionForm from '@/components/admin/transaction/TransactionForm.vue'
+
 export default {
+    components: {
+        Modal,
+        TransactionForm,
+    },
     data() {
         return {
             transactions: [
@@ -48,8 +76,8 @@ export default {
                     namaBarang: 'Acer Nitro 15 AN515-58',
                     jumlahPinjam: 1,
                     tanggalPinjam: '2024-8-10',
-                    tanggalKembali: '2024-8-17',
-                    status: 'Borrowed'
+                    tanggalPengembalian: '2024-8-17',
+                    status: 'Borrowed',
                 },
                 {
                     kode: '2024002',
@@ -57,24 +85,41 @@ export default {
                     namaBarang: 'Lenovo LOQ 15 15IRH8',
                     jumlahPinjam: 1,
                     tanggalPinjam: '2024-8-10',
-                    tanggalKembali: '2024-8-17',
-                    status: 'Borrowed'
-                }
-            ]
+                    tanggalPengembalian: '2024-8-17',
+                    status: 'Borrowed',
+                },
+            ],
+            showForm: false,
+            selectedTransaction: null,
         }
     },
     methods: {
-        verifikasi(transaction) {
-            if (transaction.status === 'Borrowed') {
-                transaction.status = 'Returned'
+        openReturnForm(transaction) {
+            this.selectedTransaction = { ...transaction }
+            this.showForm = true
+        },
+        handleReturn(updatedTransaction) {
+            let index = this.transactions.findIndex(
+                (t) => t.kode === updatedTransaction.kode
+            )
+
+            if (index !== -1) {
+                this.transactions[index] = {
+                    ...updatedTransaction,
+                    status: 'Returned',
+                }
             }
-        }
-    }
+            this.cancelReturnForm()
+        },
+        cancelReturnForm() {
+            this.showForm = false
+            this.selectedTransaction = null
+        },
+    },
 }
 </script>
 
 <style scoped>
-
 .transaction-list {
     padding: 20px;
     background-color: #fff;
@@ -103,7 +148,8 @@ table {
     margin-top: 20px;
 }
 
-th, td {
+th,
+td {
     border: 1px solid #ddd;
     padding: 12px;
     text-align: left;
@@ -147,7 +193,8 @@ button {
 }
 
 @media (max-width: 600px) {
-    th, td {
+    th,
+    td {
         padding: 8px 10px;
     }
 

@@ -60,15 +60,13 @@ export default {
                 {
                     kode: '2024001',
                     nama: 'Acer Nitro 15 AN515-58',
-                    deskripsi:
-                        'Intel Core i5 12500H, RTX 3050, RAM 8GB DDR4, LAYAR 15.6',
+                    deskripsi: 'Intel Core i5 12500H, RTX 3050, RAM 8GB DDR4, LAYAR 15.6',
                     stok: 80,
                 },
                 {
                     kode: '2024002',
                     nama: 'Lenovo LOQ 15 15IRH8',
-                    deskripsi:
-                        'Intel Core i5 13450H, RTX 3050, RAM 8GB DDR4, LAYAR 15.6',
+                    deskripsi: 'Intel Core i5 13450H, RTX 3050, RAM 8GB DDR4, LAYAR 15.6',
                     stok: 80,
                 },
             ],
@@ -95,7 +93,14 @@ export default {
             this.showForm = true
         },
         handleBorrow(item) {
-            console.log('Borrow item:', item)
+            let index = this.items.findIndex(a => a.kode == item.kode)
+            
+            if (index !== -1) {
+                this.items[index] = {
+                    ...item,
+                    stok: this.items[index].stok - item.jumlah_pinjam
+                }
+            }
             this.showForm = false
         },
         cancelBorrowForm() {

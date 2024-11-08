@@ -11,7 +11,7 @@
                         <th>Nama Barang</th>
                         <th>Jumlah Pinjam</th>
                         <th>Tanggal Pinjam</th>
-                        <th>Tanggal Pengembalian</th>
+                        <th>Tanggal Kembali</th>
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
@@ -27,7 +27,7 @@
                         <td>{{ transaction.namaBarang }}</td>
                         <td>{{ transaction.jumlahPinjam }}</td>
                         <td>{{ transaction.tanggalPinjam }}</td>
-                        <td>{{ transaction.tanggalPengembalian }}</td>
+                        <td>{{ transaction.tanggalKembali }}</td>
                         <td>{{ transaction.status }}</td>
                         <td class="action-buttons">
                             <button
@@ -75,17 +75,16 @@ export default {
                     namaBarang: 'Acer Nitro 15 AN515-58',
                     jumlahPinjam: 1,
                     tanggalPinjam: '2022-10-10',
-                    tanggalPengembalian: '2022-10-17',
+                    tanggalKembali: '-',
                     status: 'Borrowed',
                 },
-
                 {
                     id: '2024002',
                     namaUser: 'Jane Smith',
                     namaBarang: 'Lenovo LOQ 15 15IRH8',
                     jumlahPinjam: 1,
                     tanggalPinjam: '2022-10-10',
-                    tanggalPengembalian: '2022-10-17',
+                    tanggalKembali: '-',
                     status: 'Borrowed',
                 },
             ],
@@ -100,13 +99,14 @@ export default {
             this.showForm = true
         },
         handleReturn(updatedTransaction) {
-            const index = this.transactions.findIndex(
+            let index = this.transactions.findIndex(
                 (t) => t.id === updatedTransaction.id
             )
 
             if (index !== -1) {
                 this.transactions[index] = {
                     ...updatedTransaction,
+                    tanggalKembali: updatedTransaction.tanggalKembali.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" }),
                     status: 'Returned',
                 }
             }
