@@ -22,10 +22,6 @@ let routes = [
         path: '/login',
         name: 'login',
         component: LoginView
-    },
-    {
-        path: '/',
-        redirect: {name: 'admin', params: {component: 'items'}}
     }
 ]
 
