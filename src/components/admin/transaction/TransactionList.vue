@@ -7,7 +7,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Kode Transaction</th>
                         <th>Nama Karyawan</th>
                         <th>Nama Barang</th>
                         <th>Jumlah Pinjam</th>

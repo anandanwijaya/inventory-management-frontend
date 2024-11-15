@@ -5,6 +5,21 @@ import 'bootstrap/dist/js/bootstrap.min.js'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import router from './router'
 import { createPinia } from 'pinia'
-import axios from 'axios'
+import { createPiniaMiddleware } from './plugins/piniaMiddleware'
+import piniaPersistedstate from 'pinia-plugin-persistedstate'
 
-createApp(App).use(router).use(createPinia()).use(router).mount('#app')
+let pinia = createPinia()
+
+// Gunakan middleware custom Anda
+
+pinia.use(createPiniaMiddleware())
+
+// Gunakan plugin persisted state dari 'pinia-plugin-persistedstate'
+
+pinia.use(piniaPersistedstate)
+
+let app = createApp(App)
+
+app.use(pinia)
+app.use(router)
+app.mount('#app')

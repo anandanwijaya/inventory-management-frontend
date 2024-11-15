@@ -21,7 +21,9 @@ export let useItemStore = defineStore('item', {
         getItemByKode: (state) => (kode) => {
             return state.items.find((item) => item.kode === kode)
         },
-    },
+        totalItems: (state) => state.items.length,
+        availableItems: (state) => state.items.filter((item) => item.stok > 0)
+    }, 
     actions: {
         addItem(item) {
             this.items.push(item)
@@ -38,5 +40,6 @@ export let useItemStore = defineStore('item', {
         deleteItem(kode) {
             this.items = this.items.filter((item) => item.kode !== kode)
         }
-    }
+    },
+    persist: true
 })

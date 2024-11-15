@@ -33,3 +33,12 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+@media (max-width: 991px) {
+    form {
+        margin-top: 20vh;
+        margin-left:  5vh;
+    }
+}
+</style>

@@ -72,8 +72,14 @@ export default {
 .scrollable-content {
   flex: 1;
   overflow-y: auto;
-  padding: 20px;
+  padding: 4vh;
   background-color: white;
   max-height: calc(100vh - 60px);
+}
+
+@media (max-width: 991px) {
+    .scrollable-content {
+        margin-top: 20vh;
+    }
 }
 </style>

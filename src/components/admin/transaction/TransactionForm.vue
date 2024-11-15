@@ -4,7 +4,7 @@
             <h2>Pengembalian Barang</h2>
 
             <div>
-                <label for="kode">Kode Barang:</label>
+                <label for="kode">Kode Transaction:</label>
                 <input type="text" v-model="form.kode" id="kode" :disabled="true" />
             </div>
 
@@ -69,7 +69,7 @@ export default {
     watch: {
         transaction(newTransaction) {
             if (newTransaction) {
-                this.form.id = newTransaction.id
+                this.form.kode = newTransaction.kode
                 this.form.namaKaryawan = newTransaction.namaKaryawan
                 this.form.namaBarang = newTransaction.namaBarang
                 this.form.jumlahPinjam = newTransaction.jumlahPinjam
