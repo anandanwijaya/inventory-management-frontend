@@ -14,7 +14,7 @@ apiClient.interceptors.request.use((config) => {
     let token = authStore.token
 
     if (token) {
-        config.headers.Authorization = token
+        config.headers.Authorization = `Bearer ${token}`
     }
 
     return config
