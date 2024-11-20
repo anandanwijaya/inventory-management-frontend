@@ -1,8 +1,6 @@
 <template>
     <div class="item-list container py-4 bg-white rounded shadow-sm">
-        <div
-            class="header d-flex justify-content-between align-items-center mb-3"
-        >
+        <div class="header d-flex justify-content-between align-items-center mb-3">
             <h2>Daftar Barang</h2>
             <button class="btn btn-primary" @click="showAddForm">
                 Tambah Item
@@ -30,6 +28,7 @@
         </Modal>
     </div>
 </template>
+
 
 <script>
 import { useItemStore } from '@/store/itemStore'

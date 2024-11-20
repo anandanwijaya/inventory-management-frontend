@@ -9,10 +9,6 @@ export function piniaPersistPlugin(context) {
         localStorage.setItem(
             `pinia-${context.store.$id}`,
             JSON.stringify(state)
-        ),
-        localStorage.setUser(
-            `pinia-${context.store.$id}`,
-            JSON.stringify(state)
         )
     })
 }

@@ -25,12 +25,12 @@
 
             <div>
                 <label for="tanggalPinjam">Tanggal Pinjam:</label>
-                <input type="date" v-model="form.tanggalPinjam" id="tanggalPinjam" :disabled="true" />
+                <input type="text" v-model="form.tanggalPinjam" id="tanggalPinjam" :disabled="true" />
             </div>
 
             <div>
                 <label for="tanggalPengembalian">Tanggal Pengembalian:</label>
-                <input type="date" v-model="form.tanggalPengembalian" id="tanggalPengembalian" />
+                <input type="text" v-model="form.tanggalPengembalian" id="tanggalPengembalian" :disabled="true" />
             </div>
 
             <div class="button-container">

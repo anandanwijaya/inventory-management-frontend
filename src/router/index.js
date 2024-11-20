@@ -1,46 +1,67 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AdminView from '../views/AdminView.vue'
 import UserView from '../views/UserView.vue'
-import LoginView from '../views/LoginView.vue'
+import HomeView from '../views/HomeView.vue'
+import Login from '@/components/auth/Login.vue'
+import Register from '@/components/auth/Register.vue'
+import { useAuthStore } from '@/store/authStore'
 
 let routes = [
     {
-        path: '/admin/:component',
+        path: '/',
+        name: 'home',
+        component: HomeView,
+        meta: { hideHeader: true, hideSidebar: true },
+        children: [
+            {
+                path: 'login',
+                name: 'login',
+                component: Login,
+            },
+            {
+                path: 'register',
+                name: 'register',
+                component: Register,
+            },
+        ],
+    },
+    {
+        path: '/admin/:component?',
         name: 'admin',
         component: AdminView,
         props: true,
-        meta: { requiresAuth: true, role: 'admin' }
+        meta: { requiresAuth: true, role: 'ADMIN' },
     },
     {
-        path: '/user/:component',
+        path: '/user/:component?',
         name: 'user',
         component: UserView,
         props: true,
-        meta: { requiresAuth: true, role: 'user' }
+        meta: { requiresAuth: true, role: 'USER' },
     },
-    {
-        path: '/login',
-        name: 'login',
-        component: LoginView
-    }
 ]
 
 let router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
-    routes
+    routes,
 })
 
 router.beforeEach((to, from, next) => {
-    let isAuthenticated = Boolean(localStorage.getItem('auth'))
-    let userRole = localStorage.getItem('role')
+    let authStore = useAuthStore()
+    let isAuthenticated = !!authStore.token
+    let userRole = authStore.role
 
-    if (to.meta.requiresAuth && !isAuthenticated) {
-        alert('You need to log in to access this page.')
-        next({ name: 'login' })
-    }else if (to.meta.requiresAuth && isAuthenticated && to.meta.role !== userRole){
-        alert('You do not have permission to access this page.')
-        next(false)
-    }else {
+    if (to.meta.requiresAuth) {
+        if (isAuthenticated) {
+            if (userRole === to.meta.role || to.meta.role === undefined) {
+                next()
+            } else {
+                next({ name: 'home' })
+            }
+        } else {
+            next({ name: 'home' })
+        }
+    } else {
         next()
     }
 })

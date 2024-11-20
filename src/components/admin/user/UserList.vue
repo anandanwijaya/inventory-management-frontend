@@ -1,20 +1,19 @@
 <template>
-    <div class="user-list container py-4 bg-white rounded shadow-sm">
-        <div class="header d-flex justify-content-between align-items-center mb-3">
-            <h2>Daftar User</h2>
-            <button class="btn btn-primary" @click="showAddForm">
-                Tambah User
-            </button> 
+    <div class="user-list">
+        <div class="header">
+            <h2>Daftar Pengguna</h2>
+            <button class="add-btn" @click="showAddForm">
+                Tambah Pengguna
+            </button>
         </div>
 
-        <div class="user-card row">
+        <div class="user-cards">
             <UserCard
-                v-for="user in users"
-                :key="user.kode"
+                v-for="user in filteredUsers"
+                :key="user.id"
                 :user="user"
                 @edit-user="editUser"
-                @delete-user="deleteUser"
-                class="col-md-6 mb-4"
+                @delete-user="handleDeleteUser"
             />
         </div>
 
@@ -30,40 +29,67 @@
 </template>
 
 <script>
-import UserCard from './UserCard.vue'
-import Modal from '../../Modal.vue'
-import UserForm from './UserForm.vue'
+import { computed, onMounted } from 'vue'
+import { useUserStore } from '@/store/userStore'
+import { useAuthStore } from '@/store/authStore'
+import UserCard from '@/components/admin/user/UserCard.vue'
+import Modal from '@/components/Modal.vue'
+import UserForm from '@/components/admin/user/UserForm.vue'
+import eventBus from '@/utils/EventBus'
 
 export default {
+    name: 'users',
     components: {
         UserCard,
         Modal,
-        UserForm,
+        UserForm
+    },
+    setup() {
+        let userStore = useUserStore()
+        let authStore = useAuthStore()
+        let users = computed(() => userStore.users)
+
+        onMounted(() => {
+            if (authStore.token) {
+                userStore.fetchUsers()
+            } else {
+                console.error('User is not authenticated')
+            }
+        })
+
+        return {
+            users,
+            userStore,
+            addUser: userStore.addUser,
+            updateUser: userStore.updateUser,
+            deleteUser: userStore.deleteUser
+        }
     },
     data() {
         return {
-            users: [
-                {
-                    id: 1,
-                    username: 'Nanda',
-                    email: 'nanda@gmail.com',
-                    role: 'Admin',
-                },
-                {
-                    id: 2,
-                    username: 'Wendy',
-                    email: 'wendy@gmail.com',
-                    role: 'User',
-                },
-            ],
             showForm: false,
             selectedUser: null,
             isEdit: false,
+            searchQuery: ''
+        }
+    },
+    computed: {
+        filteredUsers() {
+            return this.users.filter((user) =>
+                user.username
+                    .toLowerCase()
+                    .includes(this.searchQuery.toLowerCase())
+            )
         }
     },
     methods: {
         showAddForm() {
-            this.selectedUser = { id: 0, username: '', email: '', role: '' }
+            this.selectedUser = {
+                id: '',
+                username: '',
+                email: '',
+                role: 'USER'
+            }
             this.isEdit = false
             this.showForm = true
         },
@@ -72,56 +98,68 @@ export default {
             this.isEdit = true
             this.showForm = true
         },
-        handleSubmit(user) {
-            if (
-                user.id &&
-                user.username &&
-                user.email &&
-                user.role !== null &&
-                !isNaN(user.id)
-            ) {
-                if (this.isEdit) {
-                    let index = this.users.findIndex((i) => i.id === user.id)
-                    this.users[index] = user
-                } else {
-                    this.users.push(user)
-                }
-                this.showForm = false
+        async handleSubmit(user) {
+            if (this.isEdit) {
+                await this.updateUser(user)
+            } else {
+                await this.addUser(user)
             }
+            await this.userStore.fetchUsers()
+            this.showForm = false
         },
         cancelEditForm() {
             this.showForm = false
-            this.selectedUser = null
-            this.isEdit = false
         },
-        deleteUser(id) {
-            this.users = this.users.filter((user) => user.id !== id)
-            this.$emit('delete-user', id)
+        async handleDeleteUser(id) {
+            await this.deleteUser(id)
+
+            await this.userStore.fetchUsers()
         },
+        handleSearch(query) {
+            this.searchQuery = query
+        }
     },
+    mounted() {
+        eventBus.on('search', this.handleSearch)
+    },
+    beforeUnmount() {
+        eventBus.off('search', this.handleSearch)
+    }
 }
 </script>
 
 <style scoped>
 .user-list {
+    padding: 24px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 5vh;
+    margin: 20px 0;
 }
 
-.header h2 {
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+h2 {
     color: #4b3f6b;
     font-size: 24px;
 }
 
-.header .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+.add-btn {
+    background-color: #754bc5;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
 }
 
-.header .btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
+.add-btn:hover {
+    background-color: #5a37a0;
 }
 </style>

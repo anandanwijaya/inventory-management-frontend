@@ -1,6 +1,5 @@
 <template>
   <div class="user-view">
-    <div v-if="!showForm">
       <div class="scrollable-content">
         <ItemList v-if="currentComponent === 'items'" @edit-item="showEditForm" />
         <TransactionList v-if="currentComponent === 'transactions'" />
@@ -10,7 +9,6 @@
       <div v-if="showForm" class="form-content">
         <ItemForm :item="selectedItem" :isEdit="isEdit" @submit="handleSubmit" @cancel="cancelEditForm" />
       </div>
-    </div>
   </div>
 </template>
 

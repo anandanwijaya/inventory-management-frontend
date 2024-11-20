@@ -9,7 +9,7 @@ export function createPiniaMiddleware() {
             let userRole = localStorage.getItem('role')
             let protectedActions = ['addItem', 'updateItem', 'deleteItem']
 
-            if (protectedActions.includes(name) && userRole !== 'admin') {
+            if (protectedActions.includes(name) && userRole !== 'ADMIN') {
                 console.error(
                     `Unauthorized action "${name}" attempted by role "${userRole}"`
                 )
