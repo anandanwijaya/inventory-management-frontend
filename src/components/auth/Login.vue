@@ -70,9 +70,9 @@ export default {
                 authStore.setRole(role)
 
                 if (role === 'ADMIN') {
-                    this.$router.push({ name: 'admin' })
+                    this.$router.push({ name: 'admin', params: { component: 'items' } })
                 } else if (role === 'USER') {
-                    this.$router.push({ name: 'user' })
+                    this.$router.push({ name: 'user', params: { component: 'items' } })
                 }
             } catch (error) {
                 this.error = error.message
