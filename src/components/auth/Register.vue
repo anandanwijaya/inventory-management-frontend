@@ -48,6 +48,7 @@
                     required
                 />
             </div>
+
             <button type="submit" class="btn btn-success w-100">
                 Register
             </button>
@@ -58,6 +59,7 @@
         <div class="mt-3 text-center">
             <p class="text-muted">
                 Already have an account?
+
                 <a
                     href="#"
                     @click.prevent="$emit('switch', 'Login')"
@@ -99,10 +101,18 @@ export default {
 
                 console.log('Registration successful:', response)
                 alert('Registration successful!')
-                this.$emit('switch', 'Login')
+
+                this.$emit('switch', 'login')
             } catch (error) {
-                this.error = error.message
-                console.error('Registration failed:', error.message)
+                if (error.response) {
+                    this.error =
+                        error.response.data.message || 'Invalid request'
+                } else {
+                    this.error = error.message || 'An unexpected error occurred'
+                }
+
+                console.error('Registration failed:', this.error)
+                alert('Registration failed!')
             }
         }
     }

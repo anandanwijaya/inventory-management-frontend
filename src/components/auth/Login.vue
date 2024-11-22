@@ -28,6 +28,8 @@
             <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>
 
+        <div v-if="error" class="alert alert-danger mt-3">{{ error }}</div>
+
         <div class="mt-3 text-center">
             <p class="text-muted">
                 Don't have an account?
@@ -52,7 +54,7 @@ export default {
         return {
             username: '',
             password: '',
-            error: '',
+            error: ''
         }
     },
     methods: {
@@ -62,6 +64,7 @@ export default {
                     this.username,
                     this.password
                 )
+
                 let authStore = useAuthStore()
                 authStore.setToken(token)
                 authStore.setRole(role)
@@ -69,13 +72,13 @@ export default {
                 if (role === 'ADMIN') {
                     this.$router.push({ name: 'admin', params: { component: 'items' } })
                 } else if (role === 'USER') {
-                    this.$router.push({ name: 'user',  params: { component: 'items' } })
+                    this.$router.push({ name: 'user', params: { component: 'items' } })
                 }
             } catch (error) {
                 this.error = error.message
             }
-        },
-    },
+        }
+    }
 }
 </script>
 

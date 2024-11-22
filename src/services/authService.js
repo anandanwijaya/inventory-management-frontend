@@ -7,21 +7,23 @@ export let login = async (username, password) => {
             username,
             password,
         })
+
         console.log('Login response:', response.data)
 
-        if (!response.data || !response.data.data || !response.data.data.token) {
+        if (
+            !response.data ||
+            !response.data.data ||
+            !response.data.data.token
+        ) {
             throw new Error('Invalid response from server')
         }
 
         let { token, role } = response.data.data
-
         console.log('Token and role from login service:', token, role)
 
         let authStore = useAuthStore()
-
         authStore.setToken(token)
         authStore.setRole(role)
-
         console.log(
             'Token and role saved in store:',
             authStore.token,
@@ -30,8 +32,26 @@ export let login = async (username, password) => {
 
         return response.data.data
     } catch (error) {
-        console.error('Error during login:', error)
-        throw new Error(error.response?.data?.message || error.message)
+        if (error.response) {
+            switch (error.response.status) {
+                case 400:
+                    throw new Error(
+                        error.response.data.message ||
+                            'Username or password is incorrect'
+                    )
+                case 401:
+                    throw new Error(
+                        error.response.data.message || 'Invalid credentials'
+                    )
+                default:
+                    throw new Error(
+                        error.response.data.message || 'An error occurred'
+                    )
+            }
+        } else {
+            console.error('Error during login:', error)
+            throw new Error(error.message || 'An unexpected error occurred')
+        }
     }
 }
 
@@ -45,6 +65,20 @@ export let register = async (username, email, password) => {
 
         return response.data
     } catch (error) {
-        throw new Error(error.response?.data?.message || error.message)
+        if (error.response) {
+            switch (error.response.status) {
+                case 400:
+                    throw new Error(
+                        error.response.data.message || 'User already exists'
+                    )
+                default:
+                    throw new Error(
+                        error.response.data.message || 'An error occurred'
+                    )
+            }
+        } else {
+            console.error('Error during registration:', error)
+            throw new Error(error.message || 'An unexpected error occurred')
+        }
     }
 }
