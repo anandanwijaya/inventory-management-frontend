@@ -2,7 +2,7 @@
     <div class="item-list">
         <div class="header">
             <h2>Daftar Barang</h2>
-            <button class="btn" @click="showAddForm">
+            <button class="add-btn" @click="showAddForm">
                 Tambah Item
             </button>
         </div>
