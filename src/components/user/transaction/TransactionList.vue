@@ -1,8 +1,6 @@
 <template>
     <div class="transaction-list">
-        <div class="header">
-            <h2>Daftar Transaksi</h2>
-        </div>
+        <h2>Daftar Transaksi</h2>
         <div class="table-responsive">
             <table>
                 <thead>
