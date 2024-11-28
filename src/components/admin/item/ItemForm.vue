@@ -2,18 +2,6 @@
     <div>
         <form @submit.prevent="submitForm" class="mb-3 p-3 shadow-sm bg-white rounded">
             <div class="mb-3">
-                <label for="id" class="form-label">Id Barang</label>
-                <input
-                    type="number"
-                    v-model="form.id"
-                    id="id"
-                    class="form-control"
-                    :disabled="isEdit"
-                    required
-                />
-            </div>
-
-            <div class="mb-3">
                 <label for="name" class="form-label">Nama Barang</label>
                 <input
                     type="text"
