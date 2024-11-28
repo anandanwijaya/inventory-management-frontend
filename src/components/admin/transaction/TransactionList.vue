@@ -35,7 +35,7 @@
                                 @click="openReturnForm(transaction)"
                                 :disabled="transaction.status === 'BORROWED' || transaction.status === 'RETURNED'"
                             >
-                                {{ transaction.status }}
+                                {{ transaction.status == "PENDING" ? "VERIFIKASI" : "DONE" }}
                             </button>
                         </td>
                     </tr>
