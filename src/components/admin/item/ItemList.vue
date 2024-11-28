@@ -94,7 +94,7 @@ export default {
             this.showForm = true
         },
         async handleSubmit(item) {
-            if (item.id && item.name && item.description && item.quantity !== null && !isNaN(item.quantity)) {
+            if (item.name && item.description && item.quantity !== null && !isNaN(item.quantity)) {
                 if (this.isEdit) {
                     await this.itemStore.updateItem(item)
                 } else {
