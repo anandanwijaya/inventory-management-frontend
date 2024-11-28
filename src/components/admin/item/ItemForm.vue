@@ -58,7 +58,6 @@ export default {
     data() {
         return {
             form: {
-                id: '',
                 name: '',
                 description: '',
                 quantity: 0,
@@ -73,7 +72,6 @@ export default {
                     this.form = { ...newItem }
                 } else {
                     this.form = {
-                        id: '',
                         name: '',
                         description: '',
                         quantity: 0,
