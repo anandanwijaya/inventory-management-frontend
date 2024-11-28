@@ -9,8 +9,8 @@
 
         <div class="item-cards row">
             <ItemCard
-                v-for="item in items"
-                :key="item.kode"
+                v-for="item in filteredItems"
+                :key="item.id"
                 :item="item"
                 @edit-item="editItem"
                 @delete-item="deleteItem"
@@ -31,17 +31,40 @@
 
 
 <script>
+import { computed, onMounted } from 'vue'
+import { useAuthStore } from '@/store/authStore'
 import { useItemStore } from '@/store/itemStore'
 import ItemCard from '@/components/admin/item/ItemCard.vue'
 import Modal from '@/components/Modal.vue'
 import ItemForm from '@/components/admin/item/ItemForm.vue'
-import { EventBus } from '@/utils/EventBus'
+import eventBus from '@/utils/EventBus'
 
 export default {
     components: {
         ItemCard,
         Modal,
         ItemForm
+    },
+    setup() {
+        let itemStore = useItemStore()
+        let authStore = useAuthStore()
+        let items = computed(() => itemStore.items)
+
+        onMounted(() => {
+            if (authStore.token) {
+                itemStore.fetchItems()
+            } else {
+                console.error('item is not authenticated')
+            }
+        })
+
+        return {
+            items,
+            itemStore,
+            addItem: itemStore.addItem,
+            updateItem: itemStore.updateItem,
+            deleteItem: itemStore.deleteItem
+        }
     },
     data() {
         return {
@@ -52,25 +75,16 @@ export default {
         }
     },
     computed: {
-        items() {
-            return this.itemStore.items
-        },
         filteredItems() {
-            return this.items.filter((item) => {
-                return (
-                    item.kode
-                        .toLowerCase()
-                        .includes(this.searchQuery.toLowerCase()) ||
-                    item.nama
-                        .toLowerCase()
-                        .includes(this.searchQuery.toLowerCase())
-                )
-            })
-        }
-    },
+            return this.items.filter((item) =>
+                item.name
+                    .toLowerCase()
+                    .includes(this.searchQuery.toLowerCase())
+            )
+    }},
     methods: {
         showAddForm() {
-            this.selectedItem = { kode: '', nama: '', deskripsi: '', stok: '' }
+            this.selectedItem = { id: '', name: '', description: '', quantity: '' }
             this.isEdit = false
             this.showForm = true
         },
@@ -79,12 +93,12 @@ export default {
             this.isEdit = true
             this.showForm = true
         },
-        handleSubmit(item) {
-            if (item.kode && item.nama && item.deskripsi && item.stok !== null && !isNaN(item.stok)) {
+        async handleSubmit(item) {
+            if (item.id && item.name && item.description && item.quantity !== null && !isNaN(item.quantity)) {
                 if (this.isEdit) {
-                    this.itemStore.updateItem(item)
+                    await this.itemStore.updateItem(item)
                 } else {
-                    this.itemStore.addItem(item)
+                    await this.itemStore.addItem(item)
                 }
                 this.showForm = false
             }
@@ -92,23 +106,19 @@ export default {
         cancelEditForm() {
             this.showForm = false
         },
-        deleteItem(kode) {
-            this.itemStore.deleteItem(kode)
+        async deleteItem(id) {
+            await this.itemStore.deleteItem(id)
         },
         handleSearch(query) {
             this.searchQuery = query
         }
     },
     mounted() {
-        EventBus.on('search', this.handleSearch)
+        eventBus.on('search', this.handleSearch)
     },
     beforeUnmount() {
-        EventBus.off('search', this.handleSearch)
+        eventBus.off('search', this.handleSearch)
     },
-    setup() {
-        let itemStore = useItemStore()
-        return { itemStore }
-    }
 }
 </script>
 

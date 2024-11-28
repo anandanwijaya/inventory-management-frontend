@@ -1,7 +1,8 @@
 <template>
     <div class="transaction-list">
-        <h2>Daftar Transaksi</h2>
-
+        <div class="header">
+            <h2>Daftar Transaksi</h2>
+        </div>
         <div class="table-responsive">
             <table>
                 <thead>
@@ -11,34 +12,33 @@
                         <th>Nama Barang</th>
                         <th>Jumlah Pinjam</th>
                         <th>Tanggal Pinjam</th>
-                        <th>Tanggal Kembali</th>
+                        <th>Tanggal Pengembalian</th>
                         <th>Status</th>
-                        <th>Aksi</th>
+                        <th class="action-column">Aksi</th>
                     </tr>
                 </thead>
-
                 <tbody>
                     <tr
-                        v-for="transaction in transactions"
+                        v-for="transaction in filteredTransactions"
                         :key="transaction.id"
                     >
                         <td>{{ transaction.id }}</td>
-                        <td>{{ transaction.namaUser }}</td>
-                        <td>{{ transaction.namaBarang }}</td>
-                        <td>{{ transaction.jumlahPinjam }}</td>
-                        <td>{{ transaction.tanggalPinjam }}</td>
-                        <td>{{ transaction.tanggalKembali }}</td>
+                        <td>{{ transaction.user.username }}</td>
+                        <td>{{ transaction.item.name }}</td>
+                        <td>{{ transaction.quantityBorrowed }}</td>
+                        <td>{{ (transaction.borrowedAt).split('T')[0] }}</td>
+                        <td>{{ transaction.returnedAt ? (transaction.returnedAt).split('T')[0] : transaction.returnedAt }}</td>
                         <td>{{ transaction.status }}</td>
                         <td class="action-buttons">
                             <button
                                 class="return-btn"
                                 @click="openReturnForm(transaction)"
-                                :disabled="transaction.status === 'Returned'"
+                                :disabled="transaction.status === 'RETURNED' || transaction.status === 'PENDING'"
                             >
                                 {{
-                                    transaction.status === 'Returned'
-                                        ? 'Dikembalikan'
-                                        : 'Kembalikan'
+                                    transaction.status === 'RETURNED'
+                                        ? 'DIKEMBALIKAN'
+                                        : 'KEMBALIKAN'
                                 }}
                             </button>
                         </td>
@@ -57,77 +57,90 @@
     </div>
 </template>
 
+
 <script>
-import Modal from '@/components/Modal.vue'
+import { computed, onMounted } from 'vue'
+import { useAuthStore } from '@/store/authStore'
+import { useTransactionStore } from '@/store/transactionStore'
 import TransactionForm from '@/components/user/transaction/TransactionForm.vue'
+import Modal from '@/components/Modal.vue'
+import eventBus from '@/utils/EventBus'
 
 export default {
     components: {
         Modal,
-        TransactionForm,
+        TransactionForm
+    },
+    setup() {
+        let transactionStore = useTransactionStore()
+        let authStore = useAuthStore()
+        let transactions = computed(() => transactionStore.transactions)
+
+        onMounted(() => {
+            if (authStore.token) {
+                transactionStore.fetchTransactionsByUserId()
+            } else {
+                console.error('transaction is not authenticated')
+            }
+        })
+
+        return {
+            transactions,
+            transactionStore,
+            returnTransaction: transactionStore.returnTransaction
+        }
     },
     data() {
         return {
-            transactions: [
-                {
-                    id: '2024001',
-                    namaUser: 'John Doe',
-                    namaBarang: 'Acer Nitro 15 AN515-58',
-                    jumlahPinjam: 1,
-                    tanggalPinjam: '2022-10-10',
-                    tanggalKembali: '-',
-                    status: 'Borrowed',
-                },
-                {
-                    id: '2024002',
-                    namaUser: 'Jane Smith',
-                    namaBarang: 'Lenovo LOQ 15 15IRH8',
-                    jumlahPinjam: 1,
-                    tanggalPinjam: '2022-10-10',
-                    tanggalKembali: '-',
-                    status: 'Borrowed',
-                },
-            ],
             showForm: false,
             selectedTransaction: null,
+            isEdit: false,
+            searchQuery: ''
         }
     },
-
+    computed: {
+        filteredTransactions() {
+            return this.transactions.filter((transaction) =>
+                transaction.item.name
+                .toLowerCase()
+                .includes(this.searchQuery.toLowerCase())
+            )
+    }},
     methods: {
         openReturnForm(transaction) {
             this.selectedTransaction = { ...transaction }
             this.showForm = true
         },
-        handleReturn(updatedTransaction) {
-            let index = this.transactions.findIndex(
-                (t) => t.id === updatedTransaction.id
-            )
-
-            if (index !== -1) {
-                this.transactions[index] = {
-                    ...updatedTransaction,
-                    tanggalKembali: updatedTransaction.tanggalKembali.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" }),
-                    status: 'Returned',
-                }
-            }
+        async handleReturn(transaction) {
+            await this.transactionStore.returnTransaction(transaction)
+            await this.transactionStore.fetchTransactionsByUserId()
             this.cancelReturnForm()
         },
         cancelReturnForm() {
             this.showForm = false
             this.selectedTransaction = null
         },
+        
+        handleSearch(query) {
+            this.searchQuery = query
+        }
+    },
+    mounted() {
+        eventBus.on('search', this.handleSearch)
+    },
+    beforeUnmount() {
+        eventBus.off('search', this.handleSearch)
     },
 }
 </script>
 
 <style scoped>
-
 .transaction-list {
-    padding: 16px;
+    padding: 20px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin: 8px 0;
+    margin: 20px 0;
     width: 100%;
     box-sizing: border-box;
 }
@@ -150,11 +163,10 @@ table {
     margin-top: 20px;
 }
 
-th,
-td {
+th, td {
     border: 1px solid #ddd;
     padding: 12px;
-    text-align: left;
+    text-align: center;
 }
 
 th {

@@ -15,12 +15,12 @@
                 </thead>
 
                 <tbody>
-                    <tr v-for="history in histories" :key="history.id">
+                    <tr v-for="history in transactions" :key="history.id">
                         <td>{{ history.id }}</td>
-                        <td>{{ history.namaBarang }}</td>
-                        <td>{{ history.jumlahPinjam }}</td>
-                        <td>{{ history.tanggalPinjam }}</td>
-                        <td>{{ history.tanggalKembali }}</td>
+                        <td>{{ history.item.name }}</td>
+                        <td>{{ history.quantityBorrowed }}</td>
+                        <td>{{ (history.borrowedAt).split('T')[0] }}</td>
+                        <td>{{ (history.returnedAt).split('T')[0] }}</td>
                         <td :class="['status', history.status.toLowerCase()]">{{ history.status }}</td>
                     </tr>
                 </tbody>
@@ -30,29 +30,52 @@
 </template>
 
 <script>
+import { computed, onMounted } from 'vue'
+import { useAuthStore } from '@/store/authStore'
+import { useTransactionStore } from '@/store/transactionStore'
+import TransactionForm from '@/components/user/transaction/TransactionForm.vue'
+import eventBus from '@/utils/EventBus'
+
 export default {
-    name: 'HistoryList',
+    setup() {
+        let transactionStore = useTransactionStore()
+        let authStore = useAuthStore()
+        let transactions = computed(() => transactionStore.transactions.filter(a => a.status !== 'PENDING'))
+
+        onMounted(() => {
+            if (authStore.token) {
+                transactionStore.fetchTransactionsByUserId()
+            } else {
+                console.error('transaction is not authenticated')
+            }
+        })
+
+        return {
+            transactions,
+            transactionStore,
+        }
+    },
     data() {
         return {
-            histories: [
-                {
-                    id: 1,
-                    namaBarang: 'Acer Nitro 15 AN515-58',
-                    jumlahPinjam: 1,
-                    tanggalPinjam: '2023-05-01',
-                    tanggalKembali: '2023-05-10',
-                    status: 'selesai',
-                },
-                {
-                    id: 2,
-                    namaBarang: 'Lenovo LOQ 15 15IRH8',
-                    jumlahPinjam: 2,
-                    tanggalPinjam: '2023-06-15',
-                    tanggalKembali: '2023-06-20',
-                    status: 'diproses',
-                },
-            ],
+            showForm: false,
+            selectedTransaction: null,
+            isEdit: false,
+            searchQuery: ''
         }
+    },
+    computed: {
+        filteredTransactions() {
+            return this.transactions.filter((transaction) =>
+                transaction.item.name
+                .toLowerCase()
+                .includes(this.searchQuery.toLowerCase())
+            )
+    }},
+    mounted() {
+        eventBus.on('search', this.handleSearch)
+    },
+    beforeUnmount() {
+        eventBus.off('search', this.handleSearch)
     },
 }
 </script>
@@ -83,7 +106,7 @@ table {
 th, td {
     border: 1px solid #ddd;
     padding: 12px 15px;
-    text-align: left;
+    text-align: center;
 }
 
 th {
@@ -115,11 +138,11 @@ tr:hover {
     text-align: center;
 }
 
-.status.diproses {
+.status.borrowed {
     background-color: #f0ad4e;
 }
 
-.status.selesai {
+.status.returned {
     background-color: #5cb85c;
 }
 </style>

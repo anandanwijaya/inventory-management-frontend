@@ -5,7 +5,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Kode Barang</th>
+                        <th>ID Barang</th>
                         <th>Nama Barang</th>
                         <th>Deskripsi</th>
                         <th>Stok</th>
@@ -14,11 +14,11 @@
                 </thead>
 
                 <tbody>
-                    <tr v-for="item in filteredItems" :key="item.kode">
-                        <td>{{ item.kode }}</td>
-                        <td>{{ item.nama }}</td>
-                        <td>{{ item.deskripsi }}</td>
-                        <td>{{ item.stok }}</td>
+                    <tr v-for="item in filteredItems" :key="item.id">
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.description }}</td>
+                        <td>{{ item.quantity }}</td>
 
                         <td class="action-buttons">
                             <button
@@ -44,32 +44,42 @@
 </template>
 
 <script>
+import { computed, onMounted } from 'vue'
+import { useAuthStore } from '@/store/authStore'
+import { useItemStore } from '@/store/itemStore'
+import { useTransactionStore } from '@/store/transactionStore'
 import Modal from '@/components/Modal.vue'
 import ItemForm from '@/components/user/item/ItemForm.vue'
-import { EventBus } from '@/utils/EventBus'
+import eventBus from '@/utils/EventBus'
 
 export default {
     components: {
         Modal,
         ItemForm,
     },
+    setup() {
+        let itemStore = useItemStore()
+        let authStore = useAuthStore()
+        let transactionStore = useTransactionStore()
+        let items = computed(() => itemStore.items)
 
+        onMounted(() => {
+            if (authStore.token) {
+                itemStore.fetchItems()
+            } else {
+                console.error('item is not authenticated')
+            }
+        })
+
+        return {
+            items,
+            itemStore,
+            transactionStore,
+            addTransaction: transactionStore.addTransaction,
+        }
+    },
     data() {
         return {
-            items: [
-                {
-                    kode: '2024001',
-                    nama: 'Acer Nitro 15 AN515-58',
-                    deskripsi: 'Intel Core i5 12500H, RTX 3050, RAM 8GB DDR4, LAYAR 15.6',
-                    stok: 80,
-                },
-                {
-                    kode: '2024002',
-                    nama: 'Lenovo LOQ 15 15IRH8',
-                    deskripsi: 'Intel Core i5 13450H, RTX 3050, RAM 8GB DDR4, LAYAR 15.6',
-                    stok: 80,
-                },
-            ],
             showForm: false,
             selectedItem: null,
             searchQuery: '',
@@ -77,30 +87,20 @@ export default {
     },
     computed: {
         filteredItems() {
-            if (this.searchQuery) {
-                return this.items.filter((item) =>
-                    item.nama
-                        .toLowerCase()
-                        .includes(this.searchQuery.toLowerCase())
-                )
-            }
-            return this.items
-        },
-    },
+            return this.items.filter((item) =>
+                item.name
+                    .toLowerCase()
+                    .includes(this.searchQuery.toLowerCase())
+            )
+    }},
     methods: {
         borrowItem(item) {
             this.selectedItem = { ...item }
             this.showForm = true
         },
-        handleBorrow(item) {
-            let index = this.items.findIndex(a => a.kode == item.kode)
-            
-            if (index !== -1) {
-                this.items[index] = {
-                    ...item,
-                    stok: this.items[index].stok - item.jumlah_pinjam
-                }
-            }
+        async handleBorrow(item) {
+            await this.transactionStore.addTransaction(item)
+            await this.itemStore.fetchItems()
             this.showForm = false
         },
         cancelBorrowForm() {
@@ -112,10 +112,10 @@ export default {
         },
     },
     mounted() {
-        EventBus.on('search', this.handleSearch)
+        eventBus.on('search', this.handleSearch)
     },
     beforeUnmount() {
-        EventBus.off('search', this.handleSearch)
+        eventBus.off('search', this.handleSearch)
     },
 }
 </script>

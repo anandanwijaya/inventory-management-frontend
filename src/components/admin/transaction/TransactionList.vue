@@ -7,7 +7,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Kode Transaction</th>
+                        <th>ID</th>
                         <th>Nama Karyawan</th>
                         <th>Nama Barang</th>
                         <th>Jumlah Pinjam</th>
@@ -19,27 +19,23 @@
                 </thead>
                 <tbody>
                     <tr
-                        v-for="transaction in transactions"
-                        :key="transaction.kode"
+                        v-for="transaction in filteredTransactions"
+                        :key="transaction.id"
                     >
-                        <td>{{ transaction.kode }}</td>
-                        <td>{{ transaction.namaKaryawan }}</td>
-                        <td>{{ transaction.namaBarang }}</td>
-                        <td>{{ transaction.jumlahPinjam }}</td>
-                        <td>{{ transaction.tanggalPinjam }}</td>
-                        <td>{{ transaction.tanggalPengembalian }}</td>
+                        <td>{{ transaction.id }}</td>
+                        <td>{{ transaction.user.username }}</td>
+                        <td>{{ transaction.item.name }}</td>
+                        <td>{{ transaction.quantityBorrowed }}</td>
+                        <td>{{ (transaction.borrowedAt).split('T')[0] }}</td>
+                        <td>{{ transaction.returnedAt ? (transaction.returnedAt).split('T')[0] : transaction.returnedAt }}</td>
                         <td>{{ transaction.status }}</td>
                         <td class="action-buttons">
                             <button
                                 class="verif-btn"
                                 @click="openReturnForm(transaction)"
-                                :disabled="transaction.status === 'Returned'"
+                                :disabled="transaction.status === 'BORROWED' || transaction.status === 'RETURNED'"
                             >
-                                {{
-                                    transaction.status === 'Returned'
-                                        ? 'Returned'
-                                        : 'Verifikasi'
-                                }}
+                                {{ transaction.status }}
                             </button>
                         </td>
                     </tr>
@@ -59,62 +55,79 @@
 
 
 <script>
-import Modal from '@/components/Modal.vue'
+import { computed, onMounted } from 'vue'
+import { useAuthStore } from '@/store/authStore'
+import { useTransactionStore } from '@/store/transactionStore'
 import TransactionForm from '@/components/admin/transaction/TransactionForm.vue'
+import Modal from '@/components/Modal.vue'
+import eventBus from '@/utils/EventBus'
 
 export default {
     components: {
         Modal,
-        TransactionForm,
+        TransactionForm
+    },
+    setup() {
+        let transactionStore = useTransactionStore()
+        let authStore = useAuthStore()
+        let transactions = computed(() => transactionStore.transactions)
+
+        onMounted(() => {
+            if (authStore.token) {
+                transactionStore.fetchTransactions()
+            } else {
+                console.error('transaction is not authenticated')
+            }
+        })
+
+        return {
+            transactions,
+            transactionStore,
+            // addTransaction: transactionStore.addTransaction,
+            updateTransaction: transactionStore.updateTransaction,
+            // returnTransaction: transactionStore.returnTransaction
+        }
     },
     data() {
         return {
-            transactions: [
-                {
-                    kode: '2024001',
-                    namaKaryawan: 'Nanda',
-                    namaBarang: 'Acer Nitro 15 AN515-58',
-                    jumlahPinjam: 1,
-                    tanggalPinjam: '2024-8-10',
-                    tanggalPengembalian: '2024-8-17',
-                    status: 'Borrowed',
-                },
-                {
-                    kode: '2024002',
-                    namaKaryawan: 'Wendy',
-                    namaBarang: 'Lenovo LOQ 15 15IRH8',
-                    jumlahPinjam: 1,
-                    tanggalPinjam: '2024-8-10',
-                    tanggalPengembalian: '2024-8-17',
-                    status: 'Borrowed',
-                },
-            ],
             showForm: false,
             selectedTransaction: null,
+            isEdit: false,
+            searchQuery: ''
         }
     },
+    computed: {
+        filteredTransactions() {
+            return this.transactions.filter((transaction) =>
+                transaction.item.name
+                .toLowerCase()
+                .includes(this.searchQuery.toLowerCase())
+            )
+    }},
     methods: {
         openReturnForm(transaction) {
             this.selectedTransaction = { ...transaction }
             this.showForm = true
         },
-        handleReturn(updatedTransaction) {
-            let index = this.transactions.findIndex(
-                (t) => t.kode === updatedTransaction.kode
-            )
-
-            if (index !== -1) {
-                this.transactions[index] = {
-                    ...updatedTransaction,
-                    status: 'Returned',
-                }
-            }
+        async handleReturn(transaction) {
+            await this.transactionStore.updateTransaction(transaction)
+            await this.transactionStore.fetchTransactions()
             this.cancelReturnForm()
         },
         cancelReturnForm() {
             this.showForm = false
             this.selectedTransaction = null
         },
+        
+        handleSearch(query) {
+            this.searchQuery = query
+        }
+    },
+    mounted() {
+        eventBus.on('search', this.handleSearch)
+    },
+    beforeUnmount() {
+        eventBus.off('search', this.handleSearch)
     },
 }
 </script>
@@ -148,11 +161,10 @@ table {
     margin-top: 20px;
 }
 
-th,
-td {
+th, td {
     border: 1px solid #ddd;
     padding: 12px;
-    text-align: left;
+    text-align: center;
 }
 
 th {

@@ -2,11 +2,11 @@
     <div>
         <form @submit.prevent="submitForm" class="mb-3 p-3 shadow-sm bg-white rounded">
             <div class="mb-3">
-                <label for="kode" class="form-label">Kode Barang</label>
+                <label for="id" class="form-label">Id Barang</label>
                 <input
                     type="number"
-                    v-model="form.kode"
-                    id="kode"
+                    v-model="form.id"
+                    id="id"
                     class="form-control"
                     :disabled="isEdit"
                     required
@@ -14,33 +14,33 @@
             </div>
 
             <div class="mb-3">
-                <label for="nama" class="form-label">Nama Barang</label>
+                <label for="name" class="form-label">Nama Barang</label>
                 <input
                     type="text"
-                    v-model="form.nama"
-                    id="nama"
+                    v-model="form.name"
+                    id="name"
                     class="form-control"
                     required
                 />
             </div>
 
             <div class="mb-3">
-                <label for="deskripsi" class="form-label">Deskripsi</label>
+                <label for="description" class="form-label">Deskripsi</label>
                 <input
                     type="text"
-                    v-model="form.deskripsi"
-                    id="deskripsi"
+                    v-model="form.description"
+                    id="description"
                     class="form-control"
                     required
                 />
             </div>
 
             <div class="mb-3">
-                <label for="stok" class="form-label">Stok</label>
+                <label for="quantity" class="form-label">Quantity</label>
                 <input
                     type="number"
-                    v-model="form.stok"
-                    id="stok"
+                    v-model="form.quantity"
+                    id="quantity"
                     class="form-control"
                     required
                 />
@@ -70,10 +70,10 @@ export default {
     data() {
         return {
             form: {
-                kode: '',
-                nama: '',
-                deskripsi: '',
-                stok: 0,
+                id: '',
+                name: '',
+                description: '',
+                quantity: 0,
             },
         }
     },
@@ -85,10 +85,10 @@ export default {
                     this.form = { ...newItem }
                 } else {
                     this.form = {
-                        kode: '',
-                        nama: '',
-                        deskripsi: '',
-                        stok: 0,
+                        id: '',
+                        name: '',
+                        description: '',
+                        quantity: 0,
                     }
                 }
             },

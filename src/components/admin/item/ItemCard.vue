@@ -1,15 +1,15 @@
 <template>
     <div class="item-card card mb-3 shadow-sm">
         <div class="card-body">
-            <h3 class="card-title">{{ item.nama }}</h3>
-            <p class="card-text">{{ item.deskripsi }}</p>
-            <p class="card-text stock">Stok: {{ item.stok }}</p>
+            <h3 class="card-title">{{ item.name }}</h3>
+            <p class="card-text">{{ item.description }}</p>
+            <p class="card-text stock">Quantity: {{ item.quantity }}</p>
 
             <div class="buttons d-flex gap-2 mt-3">
                 <button @click="$emit('edit-item', item)" class="btn btn-success edit">
                     Edit
                 </button>
-                <button @click="$emit('delete-item', item.kode)" class="btn btn-danger delete">
+                <button @click="$emit('delete-item', item.id)" class="btn btn-danger delete">
                     Delete
                 </button>
             </div>

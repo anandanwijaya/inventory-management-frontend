@@ -1,60 +1,100 @@
 <template>
-    <div class="transaction-form">
-        <form @submit.prevent="submitForm"> 
-            <h2>Pengembalian Barang</h2>
-
-            <div>
-                <label for="id">ID Barang:</label>
-                <input type="text" v-model="form.id" id="id" :disabled="true" />
+    <div>
+        <form @submit.prevent="submitForm" class="mb-3 p-3 shadow-sm bg-white rounded">
+            <div class="mb-3">
+                <label for="id" class="form-label">ID Transaction</label>
+                <input
+                    type="number"
+                    v-model="form.id"
+                    id="id"
+                    class="form-control"
+                    disabled
+                />
             </div>
 
-            <div>
-                <label for="namaUser">Nama User:</label>
-                <input type="text" v-model="form.namaUser" id="namaUser" :disabled="true" />
+
+            <div class="mb-3">
+                <label for="username" class="form-label">Nama Karyawan</label>
+                <input
+                    type="text"
+                    v-model="form.username"
+                    id="username"
+                    class="form-control"
+                    disabled
+                />
+            </div>
+            
+            <div class="mb-3">
+                <label for="name" class="form-label">Nama Barang</label>
+                <input
+                    type="text"
+                    v-model="form.name"
+                    id="name"
+                    class="form-control"
+                    disabled
+                />
+            </div>
+            
+            <div class="mb-3">
+                <label for="quantityBorrowed" class="form-label">Jumlah Pinjam:</label>
+                <input
+                    type="number"
+                     v-model="form.quantityBorrowed"
+                    id="quantityBorrowed"
+                    class="form-control"
+                    disabled
+                />
+            </div>
+            
+            <div class="mb-3">
+                <label for="borrowedAt" class="form-label">Tanggal Pinjam:</label>
+                <input
+                    type="text"
+                    v-model="form.borrowedAt"
+                    id="borrowedAt"
+                    class="form-control"
+                    disabled
+                />
+            </div>
+            
+            <div class="mb-3">
+                <label for="returnedAt" class="form-label">Tanggal Pengembalian:</label>
+                <input
+                    type="date"
+                    v-model="form.returnedAt"
+                    id="returnedAt"
+                    class="form-control"
+                    disabled
+                />
             </div>
 
-            <div>
-                <label for="namaBarang">Nama Barang:</label>
-                <input type="text" v-model="form.namaBarang" id="namaBarang" :disabled="true" />
-            </div>
-
-            <div>
-                <label for="tanggalPinjam">Tanggal Pinjam:</label>
-                <input type="date" v-model="form.tanggalPinjam" id="tanggalPinjam" :disabled="true" />
-            </div>
-
-            <div>
-                <label for="tanggalKembali">Tanggal Kembali:</label>
-                <input type="date" v-model="form.tanggalKembali" id="tanggalKembali" />
-            </div>
-
-            <div>
-                <label for="jumlahPinjam">Jumlah Pinjam:</label>
-                <input type="number" v-model="form.jumlahPinjam" id="jumlahPinjam" :disabled="true" />
-            </div>
-
-            <div class="button-container">
-                <button type="button" @click="cancelForm">Batal</button>
-                <button type="submit">Ajukan</button>
-            </div>
+            <button type="submit" class="btn btn-success">Kembalikan</button>
+            
         </form>
     </div>
 </template>
+>
 
 <script>
 export default {
     props: {
-        transaction: Object,
+        transaction: {
+            type: Object,
+            default: () => ({}),
+        },
     },
     data() {
         return {
             form: {
                 id: this.transaction ? this.transaction.id : '',
-                namaUser: this.transaction ? this.transaction.namaUser : '',
-                namaBarang: this.transaction ? this.transaction.namaBarang : '',
-                tanggalPinjam: this.transaction ? this.transaction.tanggalPinjam : '',
-                tanggalKembali: this.transaction ? new Date : '',
-                jumlahPinjam: this.transaction ? this.transaction.jumlahPinjam : 1,
+                userId: this.transaction ? this.transaction.userId : '',
+                username: this.transaction ? this.transaction.user.username : '',
+                itemId: this.transaction ? this.transaction.itemId : '',
+                name: this.transaction ? this.transaction.item.name : '',
+                quantityBorrowed: this.transaction ? this.transaction.quantityBorrowed : 1,
+                borrowedAt: this.transaction ? this.transaction.borrowedAt : '',
+                returnedAt: '',
+                status: this.transaction ? 'RETURNED' : '',
             }
         }
     },
@@ -65,73 +105,45 @@ export default {
         cancelForm() {
             this.$emit('cancel')
         }
-    },
-    watch: {
-        transaction(newTransaction) {
-            if (newTransaction) {
-                this.form.id = newTransaction.id
-                this.form.namaUser = newTransaction.namaUser
-                this.form.namaBarang = newTransaction.namaBarang
-                this.form.tanggalPinjam = newTransaction.tanggalPinjam
-                this.form.jumlahPinjam = newTransaction.jumlahPinjam
-            }
-        }
     }
 }
 </script>
 
+
 <style scoped>
-
 form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 400px;
-    margin: auto;
-    background: #f0f0f0;
-    padding: 20px;
+    background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+} 
+
+.mb-3 {
+    margin-bottom: 1rem;
 }
 
-h2 {
-    text-align: center;
-    margin-bottom: 20px;
+.form-label {
+    font-weight: bold;
+    color: #4b3f6b;
 }
 
-label {
-    margin-top: 10px;
-}
-
-input {
-    padding: 5px;
-    margin-top: 5px;
-}
-
-.button-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-
-button {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
+.form-control {
     border-radius: 4px;
+    border: 1px solid #ccc;
 }
 
-button:hover {
+.form-control:focus {
+    border-color: #4b3f6b;
+    box-shadow: 0 0 0 0.2rem rgba(75, 63, 107, 0.25);
+}
+
+.btn-success {
+    background-color: #4caf50;
+    border-color: #4caf50;
+}
+
+.btn-success:hover {
     background-color: #45a049;
-}
-
-button[type='button'] {
-    background-color: #f44336;
-}
-
-button[type='button']:hover {
-    background-color: #e31b0c;
+    border-color: #45a049;
 }
 </style>

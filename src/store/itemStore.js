@@ -1,45 +1,48 @@
 import { defineStore } from 'pinia'
+import apiClient from '@/plugins/axios'
 
-export let useItemStore = defineStore('item', {
+export let useItemStore = defineStore('itemStore', {
     state: () => ({
-        items: [
-            {
-                kode: '2024001',
-                nama: 'Acer Nitro 15 AN515-58',
-                deskripsi: 'Intel Core i5 12500H, RTX 3050, RAM 8GB DDR4, LAYAR 15.6',
-                stok: 80,
-            },
-            {
-                kode: '2024002',
-                nama: 'Lenovo LOQ 15 15IRH8',
-                deskripsi: 'Intel Core i5 13450H, RTX 3050, RAM 8GB DDR4, LAYAR 15.6',
-                stok: 80,
-            }
-        ]
+        items: []
     }),
-    getters: {
-        getItemByKode: (state) => (kode) => {
-            return state.items.find((item) => item.kode === kode)
-        },
-        totalItems: (state) => state.items.length,
-        availableItems: (state) => state.items.filter((item) => item.stok > 0)
-    }, 
     actions: {
-        addItem(item) {
-            this.items.push(item)
-        },
-        updateItem(updatedItem) {
-            let index = this.items.findIndex(
-                (item) => item.kode === updatedItem.kode
-            )
-
-            if (index !== -1) {
-                this.items[index] = updatedItem
+        async fetchItems() {
+            try {
+                let response = await apiClient.get('/items')
+                this.items = response.data
+            } catch (error) {
+                console.error('Failed to fetch items:', error)
             }
         },
-        deleteItem(kode) {
-            this.items = this.items.filter((item) => item.kode !== kode)
+        async addItem(item) {
+            try {
+                let response = await apiClient.post('/items', item)
+                this.items.push(response.data)
+            } catch (error) {
+                console.error('Failed to add item:', error.message)
+            }
+        },
+        async updateItem(item) {
+            try {
+                let response = await apiClient.put(
+                    `/items/${item.id}`,
+                    item
+                )
+                let index = this.items.findIndex((u) => u.id === item.id)
+                if (index !== -1) {
+                    this.items.splice(index, 1, response.data)
+                }
+            } catch (error) {
+                console.error('Failed to update item:', error)
+            }
+        },
+        async deleteItem(id) {
+            try {
+                await apiClient.delete(`/items/${id}`)
+                this.items = this.items.filter((item) => item.id !== id)
+            } catch (error) {
+                console.error('Failed to delete item:', error)
+            }
         }
-    },
-    persist: true
+    }
 })
