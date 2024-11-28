@@ -1,8 +1,8 @@
 <template>
-    <div class="item-list container py-4 bg-white rounded shadow-sm">
-        <div class="header d-flex justify-content-between align-items-center mb-3">
+    <div class="item-list">
+        <div class="header">
             <h2>Daftar Barang</h2>
-            <button class="btn btn-primary" @click="showAddForm">
+            <button class="btn" @click="showAddForm">
                 Tambah Item
             </button>
         </div>
@@ -124,24 +124,36 @@ export default {
 
 <style scoped>
 .item-list {
+    padding: 24px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 5vh;
+    margin: 20px 0;
 }
 
-.header h2 {
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+h2 {
     color: #4b3f6b;
     font-size: 24px;
 }
 
-.header .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+.add-btn {
+    background-color: #754bc5;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
 }
 
-.header .btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
+.add-btn:hover {
+    background-color: #5a37a0;
 }
 </style>
