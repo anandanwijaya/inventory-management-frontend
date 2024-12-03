@@ -5,6 +5,12 @@ export let useItemStore = defineStore('itemStore', {
     state: () => ({
         items: []
     }),
+    getters: {
+        getItemById: (state) => (id) => {
+            return state.items.find((item) => item.id === id)
+        },
+        totalItems: (state) => state.items.length,
+    }, 
     actions: {
         async fetchItems() {
             try {

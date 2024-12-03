@@ -5,6 +5,12 @@ export let useUserStore = defineStore('userStore', {
     state: () => ({
         users: []
     }),
+    getters: {
+        getUserById: (state) => (id) => {
+            return state.users.find((user) => user.id === id)
+        },
+        totalUsers: (state) => state.users.length,
+    }, 
     actions: {
         async fetchUsers() {
             try {
