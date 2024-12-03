@@ -100,9 +100,9 @@ export default {
         },
         async handleSubmit(user) {
             if (this.isEdit) {
-                await this.updateUser(user)
+                await this.userStore.updateUser(user)
             } else {
-                await this.addUser(user)
+                await this.userStore.addUser(user)
             }
             await this.userStore.fetchUsers()
             this.showForm = false
@@ -112,7 +112,6 @@ export default {
         },
         async handleDeleteUser(id) {
             await this.deleteUser(id)
-
             await this.userStore.fetchUsers()
         },
         handleSearch(query) {
