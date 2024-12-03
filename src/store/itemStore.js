@@ -10,6 +10,7 @@ export let useItemStore = defineStore('itemStore', {
             return state.items.find((item) => item.id === id)
         },
         totalItems: (state) => state.items.length,
+        availableStock: (state) => state.items.filter(item => item.quantity > 0).length
     }, 
     actions: {
         async fetchItems() {

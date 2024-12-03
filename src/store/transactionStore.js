@@ -5,6 +5,12 @@ export let useTransactionStore = defineStore('transactionStore', {
     state: () => ({
         transactions: []
     }),
+    getters: {
+        getTransactionById: (state) => (id) => {
+            return state.transactions.find((transaction) => transaction.id === id)
+        },
+        totalTransactions: (state) => state.transactions.length,
+    }, 
     actions: {
         async fetchTransactions() {
             try {

@@ -10,6 +10,8 @@ export let useUserStore = defineStore('userStore', {
             return state.users.find((user) => user.id === id)
         },
         totalUsers: (state) => state.users.length,
+        totalAdminRole: (state) => state.users.filter(user => user.role == 'ADMIN').length,
+        totalUserCount: (state) => state.users.filter(user => user.role == 'USER').length
     }, 
     actions: {
         async fetchUsers() {
