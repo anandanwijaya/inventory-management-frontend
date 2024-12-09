@@ -20,7 +20,7 @@
                         <td>{{ history.item.name }}</td>
                         <td>{{ history.quantityBorrowed }}</td>
                         <td>{{ (history.borrowedAt).split('T')[0] }}</td>
-                        <td>{{ (history.returnedAt).split('T')[0] }}</td>
+                        <td>{{ history.returnedAt ? (history.returnedAt).split('T')[0] : '' }}</td>
                         <td :class="['status', history.status.toLowerCase()]">{{ history.status }}</td>
                     </tr>
                 </tbody>
