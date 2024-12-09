@@ -19,6 +19,4 @@ npm run build
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### Link ke vercel
-```
 [Inventory Management Frontend](https://inventory-management-frontend-xi.vercel.app)
-```
